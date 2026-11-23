@@ -2343,11 +2343,7 @@ oppia-parameter {
 .oppia-modal-lesson-information-card .modal-dialog {
   margin: 25px auto;
   max-width: 400px;
-  min-width: 320px;
-}
-
-.oppia-modal-lesson-information-card {
-  height: fit-content;
+  min-width: 0;
 }
 
 .oppia-progress-reminder-modal .modal-dialog {
@@ -2926,12 +2922,9 @@ mat-card.preview-conversation-skin-supplemental-card {
 .oppia-modal-lesson-information-card .modal-dialog .modal-content {
   border-radius: 4px;
   height: 600px;
-  min-width: 270px;
-  overflow-y: scroll;
-}
-
-.oppia-modal-lesson-information-card .modal-dialog .modal-content::-webkit-scrollbar {
-  display: none;
+  max-height: calc(100dvh - 50px);
+  min-width: 0;
+  overflow-y: auto;
 }
 
 .oppia-modal-lesson-information-card .modal-dialog .modal-content .mat-card {

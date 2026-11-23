@@ -19,7 +19,7 @@
  * FL.LT. Learner picks a lesson to learn
  */
 
-import {test} from '@playwright/test';
+import {expect, test} from '@playwright/test';
 import testConstants from '../../utilities/common/test-constants';
 import {UserFactory} from '../../utilities/common/user-factory';
 import {CurriculumAdmin} from '../../utilities/user/curriculum-admin';
@@ -157,6 +157,30 @@ test.describe('Logged-Out Learner', function () {
     await loggedOutLearner.playChapterFromStory('Exploration 1');
 
     await loggedOutLearner.openLessonInfoModal();
+
+    const page = loggedOutLearner.page;
+    const viewport = page.viewportSize();
+    if (!viewport) {
+      throw new Error('The lesson info test requires a fixed viewport.');
+    }
+    await page.setViewportSize({...viewport, height: 500});
+    try {
+      const modalContent = page.locator(
+        '.oppia-modal-lesson-information-card .modal-content'
+      );
+      await expect(modalContent).toBeInViewport({ratio: 1});
+      await modalContent.evaluate(content => {
+        content.scrollTop = content.scrollHeight;
+      });
+      await expect(
+        modalContent.locator('.e2e-test-share-link-facebook')
+      ).toBeInViewport({ratio: 1});
+      await modalContent.evaluate(content => {
+        content.scrollTop = 0;
+      });
+    } finally {
+      await page.setViewportSize(viewport);
+    }
 
     // Check basic lesson info.
     await loggedOutLearner.expectLessonInfoToShowRating('Unrated');
